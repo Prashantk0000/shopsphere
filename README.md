@@ -72,17 +72,7 @@ A production-ready Django e-commerce platform with 15+ core features: product ca
 - Payment: create linked to order
 - InventoryLog: auto-write on sale / return
 
----
 
-## 🚢 Deployment Notes
-
-- Change `SECRET_KEY` and set `DEBUG = False` in `settings.py`
-- Configure `ALLOWED_HOSTS`
-- Run `python manage.py collectstatic`
-- Switch to PostgreSQL for production (already ORM-compatible)
-- Serve static/media via WhiteNoise or cloud storage
-
----
 
 ## 📄 License
 MIT — free to use, modify, and distribute.
