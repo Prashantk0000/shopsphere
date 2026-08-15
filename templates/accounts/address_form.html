@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4>{{ action }} Address</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label class="form-label">Type</label>{{ form.address_type }}</div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Full Name</label>{{ form.full_name }}</div>
+                        </div>
+                        <div class="mb-3"><label class="form-label">Phone</label>{{ form.phone }}</div>
+                        <div class="mb-3"><label class="form-label">Street Address</label>{{ form.street_address }}</div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label class="form-label">City</label>{{ form.city }}</div>
+                            <div class="col-md-6 mb-3"><label class="form-label">State</label>{{ form.state }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label class="form-label">Postal Code</label>{{ form.postal_code }}</div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Country</label>{{ form.country }}</div>
+                        </div>
+                        <div class="form-check mb-3">
+                            {{ form.is_default }}
+                            <label class="form-check-label">Set as default</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Address</button>
+                        <a href="{% url 'accounts:address_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

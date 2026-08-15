@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Manage Orders — Admin{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4"><i class="bi bi-clipboard-check"></i> Manage Orders</h2>
+    <form method="get" class="mb-3">
+        <select name="status" class="form-select form-select-sm w-auto d-inline" onchange="this.form.submit()">
+            <option value="">All Statuses</option>
+            {% for val, label in status_choices %}
+            <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <table class="table bg-white shadow-sm">
+        <thead class="table-light"><tr><th>Order</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th><th>Update</th></tr></thead>
+        <tbody>
+        {% for o in orders %}
+        <tr>
+            <td><a href="{% url 'orders:order_detail' o.order_number %}">{{ o.order_number }}</a></td>
+            <td>{{ o.full_name }}<br><small class="text-muted">{{ o.email }}</small></td>
+            <td>{{ o.created_at|date:"Y-m-d H:i" }}</td>
+            <td>₹{{ o.get_total|intcomma }}</td>
+            <td><span class="badge bg-info">{{ o.get_status_display }}</span></td>
+            <td>
+                <form method="post" action="{% url 'orders:update_order_status' o.order_number %}" class="d-flex">
+                    {% csrf_token %}
+                    <select name="status" class="form-select form-select-sm">
+                        {% for val, label in status_choices %}
+                        <option value="{{ val }}" {% if o.status == val %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-sm btn-primary ms-1">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-muted text-center">No orders.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

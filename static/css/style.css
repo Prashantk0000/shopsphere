@@ -1,0 +1,63 @@
+/* ShopSphere Custom Styles */
+:root {
+  --primary: #4e73df;
+  --accent: #f6c23e;
+}
+
+body {
+  background: #f8f9fc;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Hero */
+.hero-section {
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+  border-radius: 0 0 30px 30px;
+}
+
+/* Product card */
+.product-card {
+  transition: transform .2s ease, box-shadow .2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,.08) !important;
+}
+.product-img {
+  height: 200px;
+  object-fit: cover;
+  background: #f0f0f0;
+}
+.product-detail-img {
+  height: 400px;
+  object-fit: contain;
+  background: #f8f9fa;
+  padding: 20px;
+}
+.wishlist-btn {
+  background: white;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  text-decoration: none;
+}
+
+/* Category card */
+.category-card {
+  transition: transform .2s ease;
+}
+.category-card:hover {
+  transform: scale(1.03);
+}
+
+
+
+
+

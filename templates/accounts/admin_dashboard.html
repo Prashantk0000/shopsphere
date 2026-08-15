@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Admin Dashboard — ShopSphere{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Admin Dashboard</h2>
+    <div class="row g-3 mb-4">
+        <div class="col-md-3"><div class="card border-0 shadow-sm text-center"><div class="card-body"><i class="bi bi-box display-6 text-primary"></i><h3 class="mt-2">{{ total_products }}</h3><p class="text-muted mb-0">Products</p></div></div></div>
+        <div class="col-md-3"><div class="card border-0 shadow-sm text-center"><div class="card-body"><i class="bi bi-grid display-6 text-success"></i><h3 class="mt-2">{{ total_categories }}</h3><p class="text-muted mb-0">Categories</p></div></div></div>
+        <div class="col-md-3"><div class="card border-0 shadow-sm text-center"><div class="card-body"><i class="bi bi-cart-check display-6 text-warning"></i><h3 class="mt-2">{{ total_orders }}</h3><p class="text-muted mb-0">Orders</p></div></div></div>
+        <div class="col-md-3"><div class="card border-0 shadow-sm text-center"><div class="card-body"><i class="bi bi-people display-6 text-info"></i><h3 class="mt-2">{{ total_users }}</h3><p class="text-muted mb-0">Users</p></div></div></div>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Recent Orders</h5>
+                    <table class="table small">
+                        <thead><tr><th>Order</th><th>Customer</th><th>Status</th><th>Total</th></tr></thead>
+                        <tbody>
+                        {% for o in recent_orders %}
+                        <tr>
+                            <td><a href="{% url 'orders:order_detail' o.order_number %}">{{ o.order_number }}</a></td>
+                            <td>{{ o.full_name }}</td>
+                            <td><span class="badge bg-secondary">{{ o.status }}</span></td>
+                            <td>₹{{ o.get_total|intcomma }}</td>
+                        </tr>
+                        {% empty %}<tr><td colspan="4" class="text-muted">No orders yet.</td></tr>{% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="{% url 'orders:manage_orders' %}" class="btn btn-sm btn-primary">Manage All Orders</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Low Stock Alerts</h5>
+                    <ul class="list-unstyled small">
+                        {% for p in low_stock %}
+                        <li class="d-flex justify-content-between border-bottom py-1">
+                            <a href="/admin/store/product/{{ p.id }}/change/">{{ p.name|truncatechars:30 }}</a>
+                            <span class="badge bg-danger">{{ p.stock }}</span>
+                        </li>
+                        {% empty %}<li class="text-muted">All products well-stocked.</li>{% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

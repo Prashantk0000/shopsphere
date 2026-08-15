@@ -56,8 +56,11 @@ A production-ready Django e-commerce platform with 15+ core features: product ca
 
 ---
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 53e3ff83b75ebac1fabf98c9f92e7a230d5feece
 ## 🛠️ Django ORM — 15+ CRUD Operations
 
 - Product: list, filter, search, sort, paginate, detail, wishlist toggle, review CRUD
