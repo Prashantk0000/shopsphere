@@ -68,7 +68,6 @@ A production-ready Django e-commerce platform with 15+ core features: product ca
 - InventoryLog: auto-write on sale / return
 
 
-
 ## 📄 License
 MIT — free to use, modify, and distribute.
 
