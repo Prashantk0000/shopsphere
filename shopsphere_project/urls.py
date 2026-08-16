@@ -11,4 +11,5 @@ urlpatterns = [
 
     # Serve media files in both development and production
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^static/media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
