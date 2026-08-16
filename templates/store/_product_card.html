@@ -15,7 +15,7 @@
         {% endif %}
         <a href="{{ product.get_absolute_url }}">
             {% if product.image %}
-            <img src="{{ product.image.url }}" class="card-img-top product-img" alt="{{ product.name }}">
+            <img src="{{ product.image.url }}" class="card-img-top product-img" alt="{{ product.name }}" onerror="this.onerror=null; this.src='/static/media/{{ product.image.name }}';">
             {% else %}
             <div class="bg-light d-flex align-items-center justify-content-center product-img">
                 <i class="bi bi-image fs-1 text-secondary"></i>

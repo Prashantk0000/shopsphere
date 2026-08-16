@@ -20,7 +20,7 @@
             <a href="{{ cat.get_absolute_url }}" class="text-decoration-none">
                 <div class="card category-card h-100 text-center border-0 shadow-sm">
                     {% if cat.image %}
-                    <img src="{{ cat.image.url }}" class="card-img-top" style="height:120px;object-fit:cover;">
+                    <img src="{{ cat.image.url }}" class="card-img-top" style="height:120px;object-fit:cover;" onerror="this.onerror=null; this.src='/static/media/{{ cat.image.name }}';">
                     {% else %}
                     <div class="bg-light d-flex align-items-center justify-content-center" style="height:120px;">
                         <i class="bi bi-tag fs-1 text-primary"></i>

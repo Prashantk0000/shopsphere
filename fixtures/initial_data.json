@@ -1,0 +1,726 @@
+[
+{
+  "model": "store.category",
+  "pk": 1,
+  "fields": {
+    "name": "Electronics",
+    "slug": "electronics",
+    "description": "Latest gadgets and electronic devices",
+    "image": "categories/electronics_7pEfJ6d.jpg",
+    "is_active": true,
+    "created_at": "2026-08-15T18:39:51.737Z"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 2,
+  "fields": {
+    "name": "Fashion",
+    "slug": "fashion",
+    "description": "Clothing, shoes and accessories",
+    "image": "categories/fashion_Lj3SvnL.jpg",
+    "is_active": true,
+    "created_at": "2026-08-15T18:39:51.745Z"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 3,
+  "fields": {
+    "name": "Home & Kitchen",
+    "slug": "home-kitchen",
+    "description": "Home essentials and kitchenware",
+    "image": "categories/home-kitchen_7UOBqI9.jpg",
+    "is_active": true,
+    "created_at": "2026-08-15T18:39:51.753Z"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 4,
+  "fields": {
+    "name": "Books",
+    "slug": "books",
+    "description": "Books across all genres",
+    "image": "categories/books_lkaZlOl.jpg",
+    "is_active": true,
+    "created_at": "2026-08-15T18:39:51.761Z"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 5,
+  "fields": {
+    "name": "Sports",
+    "slug": "sports",
+    "description": "Sports and outdoor equipment",
+    "image": "categories/sports_plHy6sH.jpg",
+    "is_active": true,
+    "created_at": "2026-08-15T18:39:51.768Z"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 6,
+  "fields": {
+    "name": "Beauty",
+    "slug": "beauty",
+    "description": "Beauty and personal care products",
+    "image": "categories/beauty_jN8E0Sy.jpg",
+    "is_active": true,
+    "created_at": "2026-08-15T18:39:51.775Z"
+  }
+},
+{
+  "model": "store.brand",
+  "pk": 1,
+  "fields": {
+    "name": "Acme",
+    "slug": "acme",
+    "logo": ""
+  }
+},
+{
+  "model": "store.brand",
+  "pk": 2,
+  "fields": {
+    "name": "Sonic",
+    "slug": "sonic",
+    "logo": ""
+  }
+},
+{
+  "model": "store.brand",
+  "pk": 3,
+  "fields": {
+    "name": "Nova",
+    "slug": "nova",
+    "logo": ""
+  }
+},
+{
+  "model": "store.brand",
+  "pk": 4,
+  "fields": {
+    "name": "Zenith",
+    "slug": "zenith",
+    "logo": ""
+  }
+},
+{
+  "model": "store.brand",
+  "pk": 5,
+  "fields": {
+    "name": "Peak",
+    "slug": "peak",
+    "logo": ""
+  }
+},
+{
+  "model": "store.brand",
+  "pk": 6,
+  "fields": {
+    "name": "Vortex",
+    "slug": "vortex",
+    "logo": ""
+  }
+},
+{
+  "model": "store.brand",
+  "pk": 7,
+  "fields": {
+    "name": "Prime",
+    "slug": "prime",
+    "logo": ""
+  }
+},
+{
+  "model": "store.brand",
+  "pk": 8,
+  "fields": {
+    "name": "Elite",
+    "slug": "elite",
+    "logo": ""
+  }
+},
+{
+  "model": "store.product",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "brand": 7,
+    "name": "Wireless Bluetooth Headphones",
+    "slug": "wireless-bluetooth-headphones",
+    "description": "Premium noise-cancelling wireless headphones with 30hr battery life.",
+    "price": "2999.00",
+    "discount_price": "1999.00",
+    "image": "products/wireless-bluetooth-headphones.jpg",
+    "stock": 29,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:51.840Z",
+    "updated_at": "2026-08-15T19:52:50.655Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "brand": 6,
+    "name": "Smart Watch Pro",
+    "slug": "smart-watch-pro",
+    "description": "Fitness tracking, heart rate monitor, and always-on AMOLED display.",
+    "price": "8999.00",
+    "discount_price": "6499.00",
+    "image": "products/smart-watch-pro.jpg",
+    "stock": 22,
+    "is_available": true,
+    "is_featured": true,
+    "created_at": "2026-08-15T18:39:51.851Z",
+    "updated_at": "2026-08-15T19:52:50.673Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 3,
+  "fields": {
+    "category": 1,
+    "brand": 6,
+    "name": "4K Ultra HD Smart TV 43\"",
+    "slug": "4k-ultra-hd-smart-tv-43",
+    "description": "Crystal-clear 4K resolution with HDR and built-in streaming apps.",
+    "price": "34999.00",
+    "discount_price": "27999.00",
+    "image": "products/4k-ultra-hd-smart-tv-43.jpg",
+    "stock": 41,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:51.860Z",
+    "updated_at": "2026-08-15T19:52:50.685Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 4,
+  "fields": {
+    "category": 1,
+    "brand": 4,
+    "name": "Wireless Mouse",
+    "slug": "wireless-mouse",
+    "description": "Ergonomic wireless mouse with silent clicks.",
+    "price": "799.00",
+    "discount_price": "499.00",
+    "image": "products/wireless-mouse.jpg",
+    "stock": 34,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:51.869Z",
+    "updated_at": "2026-08-15T19:52:50.695Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 5,
+  "fields": {
+    "category": 1,
+    "brand": 8,
+    "name": "Mechanical Keyboard RGB",
+    "slug": "mechanical-keyboard-rgb",
+    "description": "Cherry MX switches with per-key RGB backlighting.",
+    "price": "4999.00",
+    "discount_price": null,
+    "image": "products/mechanical-keyboard-rgb.jpg",
+    "stock": 12,
+    "is_available": true,
+    "is_featured": true,
+    "created_at": "2026-08-15T18:39:51.879Z",
+    "updated_at": "2026-08-15T19:52:50.706Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 6,
+  "fields": {
+    "category": 2,
+    "brand": 5,
+    "name": "Men's Cotton T-Shirt",
+    "slug": "mens-cotton-t-shirt",
+    "description": "100% organic cotton, breathable and comfortable.",
+    "price": "799.00",
+    "discount_price": "499.00",
+    "image": "products/mens-cotton-t-shirt.jpg",
+    "stock": 47,
+    "is_available": true,
+    "is_featured": true,
+    "created_at": "2026-08-15T18:39:51.888Z",
+    "updated_at": "2026-08-15T19:52:50.715Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 7,
+  "fields": {
+    "category": 2,
+    "brand": 8,
+    "name": "Women's Denim Jacket",
+    "slug": "womens-denim-jacket",
+    "description": "Classic denim jacket for all seasons.",
+    "price": "2499.00",
+    "discount_price": "1799.00",
+    "image": "products/womens-denim-jacket.jpg",
+    "stock": 19,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:51.896Z",
+    "updated_at": "2026-08-15T19:52:50.722Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 8,
+  "fields": {
+    "category": 2,
+    "brand": 2,
+    "name": "Running Shoes",
+    "slug": "running-shoes",
+    "description": "Lightweight running shoes with cushioned soles.",
+    "price": "3499.00",
+    "discount_price": "2499.00",
+    "image": "products/running-shoes.jpg",
+    "stock": 46,
+    "is_available": true,
+    "is_featured": true,
+    "created_at": "2026-08-15T18:39:51.905Z",
+    "updated_at": "2026-08-15T19:52:50.730Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 9,
+  "fields": {
+    "category": 2,
+    "brand": 1,
+    "name": "Leather Wallet",
+    "slug": "leather-wallet",
+    "description": "Genuine leather bifold wallet with RFID protection.",
+    "price": "1299.00",
+    "discount_price": null,
+    "image": "products/leather-wallet.jpg",
+    "stock": 8,
+    "is_available": true,
+    "is_featured": true,
+    "created_at": "2026-08-15T18:39:51.914Z",
+    "updated_at": "2026-08-15T19:52:50.738Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 10,
+  "fields": {
+    "category": 3,
+    "brand": 8,
+    "name": "Non-Stick Cookware Set",
+    "slug": "non-stick-cookware-set",
+    "description": "7-piece non-stick cookware set with heat-resistant handles.",
+    "price": "4999.00",
+    "discount_price": "3499.00",
+    "image": "products/non-stick-cookware-set_Uknpy1N.jpg",
+    "stock": 50,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:51.923Z",
+    "updated_at": "2026-08-15T20:36:01.911Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 11,
+  "fields": {
+    "category": 3,
+    "brand": 4,
+    "name": "Coffee Maker",
+    "slug": "coffee-maker",
+    "description": "Programmable coffee maker with 12-cup capacity.",
+    "price": "6999.00",
+    "discount_price": "4999.00",
+    "image": "products/coffee-maker.png",
+    "stock": 23,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:51.931Z",
+    "updated_at": "2026-08-15T20:36:01.873Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 12,
+  "fields": {
+    "category": 3,
+    "brand": 8,
+    "name": "Bedsheet Set (King Size)",
+    "slug": "bedsheet-set-king-size",
+    "description": "Soft microfiber bedsheet with 2 pillow covers.",
+    "price": "1999.00",
+    "discount_price": "1299.00",
+    "image": "products/bedsheet-set-king-size_eXramwq.jpg",
+    "stock": 17,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:51.939Z",
+    "updated_at": "2026-08-15T20:36:01.865Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 13,
+  "fields": {
+    "category": 4,
+    "brand": 2,
+    "name": "The Complete Python Programming",
+    "slug": "the-complete-python-programming",
+    "description": "Master Python from basics to advanced with 500+ examples.",
+    "price": "999.00",
+    "discount_price": "699.00",
+    "image": "products/the-complete-python-programming.png",
+    "stock": 26,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:51.948Z",
+    "updated_at": "2026-08-15T20:36:01.858Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 14,
+  "fields": {
+    "category": 4,
+    "brand": 7,
+    "name": "Atomic Habits",
+    "slug": "atomic-habits",
+    "description": "The life-changing bestseller on building better habits.",
+    "price": "599.00",
+    "discount_price": "399.00",
+    "image": "products/atomic-habits_A4o4Jam.png",
+    "stock": 45,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:51.956Z",
+    "updated_at": "2026-08-15T20:36:01.834Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 15,
+  "fields": {
+    "category": 5,
+    "brand": 6,
+    "name": "Yoga Mat Premium",
+    "slug": "yoga-mat-premium",
+    "description": "Non-slip 6mm thick yoga mat with carrying strap.",
+    "price": "1499.00",
+    "discount_price": "999.00",
+    "image": "products/yoga-mat-premium_iSKsCmt.jpg",
+    "stock": 43,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:51.964Z",
+    "updated_at": "2026-08-15T20:36:01.904Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 16,
+  "fields": {
+    "category": 5,
+    "brand": 3,
+    "name": "Dumbbells Set 20kg",
+    "slug": "dumbbells-set-20kg",
+    "description": "Adjustable dumbbells for home workouts.",
+    "price": "3999.00",
+    "discount_price": "2999.00",
+    "image": "products/dumbbells-set-20kg.png",
+    "stock": 10,
+    "is_available": true,
+    "is_featured": true,
+    "created_at": "2026-08-15T18:39:51.973Z",
+    "updated_at": "2026-08-15T20:36:01.898Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 17,
+  "fields": {
+    "category": 5,
+    "brand": 7,
+    "name": "Football (Size 5)",
+    "slug": "football-size-5",
+    "description": "Official size and weight football, machine-stitched.",
+    "price": "1299.00",
+    "discount_price": "899.00",
+    "image": "products/football-size-5.png",
+    "stock": 47,
+    "is_available": true,
+    "is_featured": true,
+    "created_at": "2026-08-15T18:39:51.981Z",
+    "updated_at": "2026-08-15T20:36:01.888Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 18,
+  "fields": {
+    "category": 6,
+    "brand": 2,
+    "name": "Face Cream Moisturizer",
+    "slug": "face-cream-moisturizer",
+    "description": "Hydrating face cream with vitamin E for all skin types.",
+    "price": "899.00",
+    "discount_price": "599.00",
+    "image": "products/face-cream-moisturizer.png",
+    "stock": 31,
+    "is_available": true,
+    "is_featured": true,
+    "created_at": "2026-08-15T18:39:51.990Z",
+    "updated_at": "2026-08-15T20:36:01.851Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 19,
+  "fields": {
+    "category": 6,
+    "brand": 8,
+    "name": "Hair Dryer Professional",
+    "slug": "hair-dryer-professional",
+    "description": "Salon-grade hair dryer with 3 heat settings.",
+    "price": "2999.00",
+    "discount_price": "1999.00",
+    "image": "products/hair-dryer-professional.png",
+    "stock": 39,
+    "is_available": true,
+    "is_featured": true,
+    "created_at": "2026-08-15T18:39:51.999Z",
+    "updated_at": "2026-08-15T20:36:01.843Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 20,
+  "fields": {
+    "category": 6,
+    "brand": 5,
+    "name": "Lipstick Combo Pack",
+    "slug": "lipstick-combo-pack",
+    "description": "Set of 5 matte long-lasting lipsticks.",
+    "price": "1499.00",
+    "discount_price": "999.00",
+    "image": "products/lipstick-combo-pack.png",
+    "stock": 25,
+    "is_available": true,
+    "is_featured": false,
+    "created_at": "2026-08-15T18:39:52.008Z",
+    "updated_at": "2026-08-15T20:36:01.880Z"
+  }
+},
+{
+  "model": "store.review",
+  "pk": 1,
+  "fields": {
+    "product": 19,
+    "user": 3,
+    "rating": 5,
+    "title": "good",
+    "comment": "nice product",
+    "created_at": "2026-08-15T22:28:03.789Z"
+  }
+},
+{
+  "model": "store.wishlist",
+  "pk": 1,
+  "fields": {
+    "user": 3,
+    "created_at": "2026-08-15T22:27:34.001Z",
+    "products": []
+  }
+},
+{
+  "model": "store.coupon",
+  "pk": 1,
+  "fields": {
+    "code": "WELCOME10",
+    "discount_percent": 10,
+    "active": true,
+    "valid_from": "2026-08-14T18:39:52.015Z",
+    "valid_until": "2026-11-13T18:39:52.015Z"
+  }
+},
+{
+  "model": "store.coupon",
+  "pk": 2,
+  "fields": {
+    "code": "SAVE20",
+    "discount_percent": 20,
+    "active": true,
+    "valid_from": "2026-08-14T18:39:52.023Z",
+    "valid_until": "2026-09-14T18:39:52.023Z"
+  }
+},
+{
+  "model": "accounts.customer",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "role": "admin",
+    "phone": "",
+    "avatar": "",
+    "date_of_birth": null,
+    "created_at": "2026-08-15T18:39:51.009Z"
+  }
+},
+{
+  "model": "accounts.customer",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "role": "customer",
+    "phone": "",
+    "avatar": "",
+    "date_of_birth": null,
+    "created_at": "2026-08-15T18:39:51.728Z"
+  }
+},
+{
+  "model": "accounts.customer",
+  "pk": 3,
+  "fields": {
+    "user": 3,
+    "role": "customer",
+    "phone": "",
+    "avatar": "",
+    "date_of_birth": null,
+    "created_at": "2026-08-15T19:28:03.110Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 1,
+  "fields": {
+    "user": 3,
+    "order_number": "SS50FACD7CAF",
+    "full_name": "pk pk",
+    "email": "pk@gmail.com",
+    "phone": "8899657300",
+    "address": "babri shamli",
+    "city": "shamli",
+    "state": "uttar predesh",
+    "postal_code": "251305",
+    "country": "India",
+    "coupon": 1,
+    "discount": "199.90",
+    "shipping_cost": "0.00",
+    "status": "cancelled",
+    "created_at": "2026-08-15T19:32:29.761Z",
+    "updated_at": "2026-08-15T19:32:29.761Z"
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 1,
+  "fields": {
+    "order": 1,
+    "product": 19,
+    "product_name": "Hair Dryer Professional",
+    "price": "1999.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.payment",
+  "pk": 1,
+  "fields": {
+    "order": 1,
+    "method": "cod",
+    "transaction_id": "",
+    "amount": "1799.10",
+    "status": "pending",
+    "created_at": "2026-08-15T19:32:29.788Z"
+  }
+},
+{
+  "model": "orders.inventorylog",
+  "pk": 1,
+  "fields": {
+    "product": 19,
+    "action": "sale",
+    "quantity": 1,
+    "note": "Order SS50FACD7CAF",
+    "created_at": "2026-08-15T19:32:29.783Z"
+  }
+},
+{
+  "model": "orders.inventorylog",
+  "pk": 2,
+  "fields": {
+    "product": 19,
+    "action": "return",
+    "quantity": 1,
+    "note": "Cancel order SS50FACD7CAF",
+    "created_at": "2026-08-15T19:33:58.335Z"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$mjYJ3JHrBuwrQdTEUVeqFo$bRkD0swzflw4ktak9mBE5j2BOOzWnBlmMv30XOnqqi8=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "Admin",
+    "last_name": "",
+    "email": "admin@shopsphere.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-08-15T18:39:50.294Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$GVMwj0XRtGlGMDZKdu6atD$k1klfDXDYaR7PA/gJaO7jKUDPUFUtLZv6FVGEcYv9W0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "customer",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "customer@shopsphere.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-08-15T18:39:51.029Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$yVeqacqmdqwKUqjbbwnaoh$awGlBqGB/AP6SsCeB9TiWoZQ5ArNa1/QkpDz/CbEs88=",
+    "last_login": "2026-08-15T19:33:47.970Z",
+    "is_superuser": false,
+    "username": "pk012",
+    "first_name": "pk",
+    "last_name": "pk",
+    "email": "pk@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-08-15T19:28:02.729Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

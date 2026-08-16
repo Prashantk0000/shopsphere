@@ -28,6 +28,12 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('store:category_detail', args=[self.slug])
 
+    @property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+        return ''
+
 
 class Brand(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -81,6 +87,12 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('store:product_detail', args=[self.slug])
+
+    @property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+        return ''
 
     @property
     def final_price(self):

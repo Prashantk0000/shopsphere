@@ -15,7 +15,7 @@
         <div class="col-md-6">
             <div class="card border-0 shadow-sm">
                 {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top product-detail-img" alt="{{ product.name }}">
+                <img src="{{ product.image.url }}" class="card-img-top product-detail-img" alt="{{ product.name }}" onerror="this.onerror=null; this.src='/static/media/{{ product.image.name }}';">
                 {% else %}
                 <div class="bg-light d-flex align-items-center justify-content-center product-detail-img">
                     <i class="bi bi-image fs-1 text-secondary"></i>
