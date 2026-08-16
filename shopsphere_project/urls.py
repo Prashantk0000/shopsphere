@@ -10,6 +10,9 @@ urlpatterns = [
     path('', include('store.urls', namespace='store')),
 ]
 
+# Serve media files (uploaded product/category images) in all environments,
+# since this project does not use external storage (e.g. S3) for media.
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.BASE_DIR / 'static')
