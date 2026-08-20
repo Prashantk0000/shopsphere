@@ -1,0 +1,31 @@
+ShopSphere — Order Confirmation
+
+Hello {{ order.full_name }},
+
+Thank you for your order! We have received your order #{{ order.order_number }} and it is currently being processed.
+
+ORDER SUMMARY:
+--------------------------------------------------
+{% for item in items %}
+- {{ item.product_name }} x{{ item.quantity }} @ Rs. {{ item.price }} = Rs. {{ item.get_cost }}
+{% endfor %}
+--------------------------------------------------
+Subtotal: Rs. {{ order.get_subtotal }}
+{% if order.discount > 0 %}Discount: -Rs. {{ order.discount }}
+{% endif %}Shipping: {% if order.shipping_cost > 0 %}Rs. {{ order.shipping_cost }}{% else %}FREE{% endif %}
+Total: Rs. {{ order.get_total }}
+
+SHIPPING ADDRESS:
+{{ order.full_name }}
+{{ order.address }}
+{{ order.city }}, {{ order.state }} {{ order.postal_code }}
+{{ order.country }}
+Phone: {{ order.phone }}
+
+PAYMENT INFORMATION:
+Method: {{ order.payment.get_method_display|default:order.payment.method }}
+Status: {{ order.payment.get_status_display|default:order.payment.status }}
+{% if order.payment.transaction_id %}Txn ID: {{ order.payment.transaction_id }}
+{% endif %}
+
+Thank you for shopping with ShopSphere!

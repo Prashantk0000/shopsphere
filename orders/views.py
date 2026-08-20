@@ -3,12 +3,15 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.utils import timezone
 from decimal import Decimal
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from store.cart import Cart
 from store.models import Coupon, Product
 from .models import Order, OrderItem, Payment, InventoryLog
 from .forms import CheckoutForm, PaymentForm, CouponApplyForm
+from .payment import PaymentGatewayService
+from .emails import send_order_confirmation_email
 from accounts.views import is_admin_user
 
 
@@ -63,28 +66,33 @@ def checkout(request):
                         note=f"Order {order.order_number}"
                     )
 
-            # Payment
+            # Create Payment record
             payment = payment_form.save(commit=False)
             payment.order = order
             payment.amount = order.get_total()
+
             if payment.method == 'cod':
                 payment.status = 'pending'
+                payment.save()
                 order.status = 'processing'
+                order.save(update_fields=['status'])
+
+                # Dispatch mailbox email notification
+                send_order_confirmation_email(order)
+
+                # Clear cart + coupon
+                cart.clear()
+                if 'coupon_id' in request.session:
+                    del request.session['coupon_id']
+
+                messages.success(request, f"Order {order.order_number} placed successfully!")
+                return redirect('orders:order_success', order_number=order.order_number)
             else:
-                # Simulate a successful gateway response
-                payment.status = 'completed'
-                payment.transaction_id = 'TXN' + order.order_number
-                order.status = 'paid'
-            payment.save()
-            order.save(update_fields=['status'])
+                # Online payment (Razorpay, Stripe, UPI, Card, PayPal)
+                payment.status = 'pending'
+                payment.save()
+                return redirect('orders:payment_process', order_number=order.order_number)
 
-            # Clear cart + coupon
-            cart.clear()
-            if 'coupon_id' in request.session:
-                del request.session['coupon_id']
-
-            messages.success(request, f"Order {order.order_number} placed successfully!")
-            return redirect('orders:order_success', order_number=order.order_number)
     else:
         # Prefill from user's default address if available
         initial = {'full_name': request.user.get_full_name() or request.user.username, 'email': request.user.email}
@@ -196,3 +204,83 @@ def update_order_status(request, order_number):
             order.save(update_fields=['status'])
             messages.success(request, f"Order {order.order_number} → {new_status}.")
     return redirect('orders:manage_orders')
+
+
+# ---------- Gateway Payment Views ----------
+@login_required
+def payment_process(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number, user=request.user)
+
+    if order.status in ('paid', 'shipped', 'delivered'):
+        messages.info(request, "This order has already been paid for.")
+        return redirect('orders:order_detail', order_number=order.order_number)
+
+    payment, created = Payment.objects.get_or_create(
+        order=order,
+        defaults={'amount': order.get_total(), 'method': 'razorpay', 'status': 'pending'}
+    )
+
+    gateway_data = PaymentGatewayService.initialize_payment(payment)
+
+    return render(request, 'orders/payment.html', {
+        'order': order,
+        'payment': payment,
+        'gateway_data': gateway_data,
+    })
+
+
+@login_required
+def payment_verify(request):
+    if request.method != 'POST':
+        return redirect('store:product_list')
+
+    order_number = request.POST.get('order_number')
+    order = get_object_or_404(Order, order_number=order_number, user=request.user)
+
+    try:
+        payment = order.payment
+    except Payment.DoesNotExist:
+        messages.error(request, "Payment record not found for this order.")
+        return redirect('orders:checkout')
+
+    success, txn_id, raw_data = PaymentGatewayService.verify_payment(payment, request.POST)
+
+    if success:
+        payment.status = 'completed'
+        payment.transaction_id = txn_id
+        payment.raw_response = raw_data
+        payment.save()
+
+        order.status = 'paid'
+        order.save(update_fields=['status'])
+
+        # Send confirmation email to customer mailbox
+        send_order_confirmation_email(order)
+
+        # Clear cart & coupon session
+        cart = Cart(request)
+        cart.clear()
+        if 'coupon_id' in request.session:
+            del request.session['coupon_id']
+
+        messages.success(request, f"Payment successful! Order #{order.order_number} has been confirmed.")
+        return redirect('orders:order_success', order_number=order.order_number)
+    else:
+        payment.status = 'failed'
+        payment.raw_response = raw_data
+        payment.save()
+
+        messages.error(request, f"Payment failed: {raw_data or 'Transaction declined'}. Please try again.")
+        return redirect('orders:payment_process', order_number=order.order_number)
+
+
+@csrf_exempt
+def payment_webhook(request):
+    """
+    CSRF-exempt endpoint for receiving payment gateway webhooks (Razorpay / Stripe).
+    """
+    if request.method == 'POST':
+        # Log or process webhook events if configured
+        return JsonResponse({'status': 'ok'})
+    return HttpResponse(status=405)
+

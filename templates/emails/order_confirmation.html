@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Order Confirmation - ShopSphere</title>
+    <style>
+        body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: #f4f6f9; color: #333333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 30px auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .header { background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); color: #ffffff; padding: 30px 25px; text-align: center; }
+        .header h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: 0.5px; }
+        .header p { margin: 8px 0 0 0; opacity: 0.9; font-size: 14px; }
+        .body { padding: 30px 25px; }
+        .greeting { font-size: 18px; font-weight: 600; color: #111; margin-bottom: 12px; }
+        .intro { color: #555; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
+        .order-badge { background-color: #e7f1ff; color: #0d6efd; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-block; margin-bottom: 20px; }
+        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
+        .items-table th { background-color: #f8f9fa; text-align: left; padding: 12px; font-size: 13px; color: #666; border-bottom: 2px solid #dee2e6; }
+        .items-table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .summary-box { background-color: #f8f9fa; border-radius: 6px; padding: 15px 20px; margin-bottom: 25px; }
+        .box { background: #fafafa; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; font-size: 13px; line-height: 1.5; }
+        .box h3 { margin: 0 0 10px 0; font-size: 14px; color: #333; text-transform: uppercase; letter-spacing: 0.5px; }
+        .footer { background-color: #212529; color: #888; text-align: center; padding: 20px; font-size: 12px; }
+        .footer a { color: #0d6efd; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ShopSphere</h1>
+            <p>Order Receipt & Confirmation</p>
+        </div>
+        <div class="body">
+            <div class="greeting">Thank you for your order, {{ order.full_name }}!</div>
+            <div class="intro">
+                We've received your order and are processing it. Below is your detailed receipt.
+            </div>
+            <div class="order-badge">
+                Order Number: #{{ order.order_number }}
+            </div>
+
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th style="text-align: center;">Qty</th>
+                        <th style="text-align: right;">Price</th>
+                        <th style="text-align: right;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td><strong>{{ item.product_name }}</strong></td>
+                        <td style="text-align: center;">{{ item.quantity }}</td>
+                        <td style="text-align: right;">&#8377;{{ item.price }}</td>
+                        <td style="text-align: right;">&#8377;{{ item.get_cost }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="summary-box">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 4px 0;">Subtotal:</td>
+                        <td style="text-align: right; padding: 4px 0;">&#8377;{{ order.get_subtotal }}</td>
+                    </tr>
+                    {% if order.discount > 0 %}
+                    <tr>
+                        <td style="padding: 4px 0; color: #198754;">Discount:</td>
+                        <td style="text-align: right; padding: 4px 0; color: #198754;">-&#8377;{{ order.discount }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td style="padding: 4px 0;">Shipping:</td>
+                        <td style="text-align: right; padding: 4px 0;">{% if order.shipping_cost > 0 %}&#8377;{{ order.shipping_cost }}{% else %}FREE{% endif %}</td>
+                    </tr>
+                    <tr style="border-top: 2px solid #dee2e6;">
+                        <td style="padding: 10px 0 0 0; font-weight: bold; font-size: 16px; color: #0d6efd;">Grand Total:</td>
+                        <td style="text-align: right; padding: 10px 0 0 0; font-weight: bold; font-size: 16px; color: #0d6efd;">&#8377;{{ order.get_total }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <table style="width: 100%; border-spacing: 0; margin-bottom: 20px;">
+                <tr>
+                    <td style="width: 50%; vertical-align: top; padding-right: 10px;">
+                        <div class="box">
+                            <h3>Shipping Address</h3>
+                            <strong>{{ order.full_name }}</strong><br>
+                            {{ order.address }}<br>
+                            {{ order.city }}, {{ order.state }} {{ order.postal_code }}<br>
+                            {{ order.country }}<br>
+                            Phone: {{ order.phone }}
+                        </div>
+                    </td>
+                    <td style="width: 50%; vertical-align: top; padding-left: 10px;">
+                        <div class="box">
+                            <h3>Payment Info</h3>
+                            <strong>Method:</strong> {{ order.payment.get_method_display|default:order.payment.method|upper }}<br>
+                            <strong>Status:</strong> <span style="color: #198754; font-weight: bold;">{{ order.payment.get_status_display|default:order.payment.status|upper }}</span><br>
+                            {% if order.payment.transaction_id %}
+                            <strong>Txn ID:</strong> {{ order.payment.transaction_id }}<br>
+                            {% endif %}
+                            <strong>Date:</strong> {{ order.created_at|date:"N j, Y, P" }}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <p style="font-size: 13px; color: #666; text-align: center; margin-top: 30px;">
+                If you have any questions regarding your order, please contact support.
+            </p>
+        </div>
+        <div class="footer">
+            &copy; ShopSphere E-Commerce. All rights reserved.<br>
+            Sent automatically to {{ order.email }}
+        </div>
+    </div>
+</body>
+</html>

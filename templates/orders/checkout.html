@@ -1,77 +1,161 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% block title %}Checkout — ShopSphere{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h2 class="mb-4"><i class="bi bi-credit-card"></i> Checkout</h2>
-    <form method="post">
+<div class="container py-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="fw-bold mb-0 me-3"><i class="bi bi-shield-check text-primary"></i> Secure Checkout</h2>
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">
+            <i class="bi bi-lock-fill me-1"></i> 256-Bit Encrypted
+        </span>
+    </div>
+
+    <form method="post" id="checkout-form">
         {% csrf_token %}
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card shadow-sm mb-3">
-                    <div class="card-body">
-                        <h5>Shipping Details</h5>
-                        <div class="row">
-                            <div class="col-md-6 mb-3"><label class="form-label">Full Name</label>{{ form.full_name }}</div>
-                            <div class="col-md-6 mb-3"><label class="form-label">Email</label>{{ form.email }}</div>
-                        </div>
-                        <div class="mb-3"><label class="form-label">Phone</label>{{ form.phone }}</div>
-                        <div class="mb-3"><label class="form-label">Address</label>{{ form.address }}</div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3"><label class="form-label">City</label>{{ form.city }}</div>
-                            <div class="col-md-6 mb-3"><label class="form-label">State</label>{{ form.state }}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3"><label class="form-label">Postal Code</label>{{ form.postal_code }}</div>
-                            <div class="col-md-6 mb-3"><label class="form-label">Country</label>{{ form.country }}</div>
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <!-- Shipping Details Card -->
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-3"><i class="bi bi-geo-alt-fill text-danger me-2"></i>Shipping Address</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted small">FULL NAME</label>
+                                {{ form.full_name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted small">EMAIL ADDRESS (FOR RECEIPT)</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted small">PHONE NUMBER</label>
+                                {{ form.phone }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted small">STREET ADDRESS</label>
+                                {{ form.address }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted small">CITY</label>
+                                {{ form.city }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted small">STATE / PROVINCE</label>
+                                {{ form.state }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted small">POSTAL CODE</label>
+                                {{ form.postal_code }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted small">COUNTRY</label>
+                                {{ form.country }}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card shadow-sm mb-3">
-                    <div class="card-body">
-                        <h5>Payment Method</h5>
-                        {% for radio in payment_form.method %}
-                        <div class="form-check">
-                            {{ radio.tag }}
-                            <label class="form-check-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+
+                <!-- Payment Method Selection Card -->
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-3"><i class="bi bi-credit-card-2-front-fill text-primary me-2"></i>Select Payment Method</h5>
+                        
+                        <div class="payment-options d-flex flex-column gap-3">
+                            {% for radio in payment_form.method %}
+                            <div class="payment-method-card border rounded-3 p-3 position-relative cursor-pointer transition-all hover-shadow">
+                                <div class="form-check d-flex align-items-center mb-0">
+                                    {{ radio.tag }}
+                                    <label class="form-check-label ms-3 w-100 cursor-pointer fw-semibold text-dark d-flex align-items-center justify-content-between" for="{{ radio.id_for_label }}">
+                                        <span>
+                                            {% if radio.data.value == 'razorpay' %}
+                                                <i class="bi bi-qr-code-scan text-primary me-2 fs-5"></i> Razorpay (UPI, GPay, Paytm, Cards)
+                                            {% elif radio.data.value == 'stripe' %}
+                                                <i class="bi bi-stripe text-indigo me-2 fs-5"></i> Stripe (Credit / Debit Cards)
+                                            {% elif radio.data.value == 'upi' %}
+                                                <i class="bi bi-phone-vibrate text-success me-2 fs-5"></i> Direct UPI / QR Code
+                                            {% elif radio.data.value == 'card' %}
+                                                <i class="bi bi-credit-card text-warning me-2 fs-5"></i> Credit / Debit Card
+                                            {% elif radio.data.value == 'paypal' %}
+                                                <i class="bi bi-paypal text-primary me-2 fs-5"></i> PayPal Express
+                                            {% else %}
+                                                <i class="bi bi-cash-stack text-secondary me-2 fs-5"></i> Cash on Delivery (COD)
+                                            {% endif %}
+                                        </span>
+                                        <span class="badge bg-light text-dark border ms-2 font-monospace">
+                                            {% if radio.data.value == 'cod' %}Pay on Delivery{% else %}Instant Approval{% endif %}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm mb-3">
-                    <div class="card-body">
-                        <h5>Order Summary</h5>
-                        {% for item in cart %}
-                        <div class="d-flex justify-content-between small border-bottom py-1">
-                            <span>{{ item.product.name|truncatechars:25 }} × {{ item.quantity }}</span>
-                            <span>₹{{ item.total_price|intcomma }}</span>
+
+            <div class="col-lg-4">
+                <!-- Order Summary Card -->
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-3"><i class="bi bi-bag-check-fill text-success me-2"></i>Order Summary</h5>
+                        
+                        <div class="cart-items-list mb-3" style="max-height: 250px; overflow-y: auto;">
+                            {% for item in cart %}
+                            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                                <div class="pe-2">
+                                    <div class="fw-semibold text-truncate" style="max-width: 180px;">{{ item.product.name }}</div>
+                                    <small class="text-muted">Qty: {{ item.quantity }} × ₹{{ item.price|intcomma }}</small>
+                                </div>
+                                <span class="fw-semibold">₹{{ item.total_price|intcomma }}</span>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                        <div class="d-flex justify-content-between mt-3"><span>Subtotal:</span><span>₹{{ cart.get_total_price|intcomma }}</span></div>
+
+                        <div class="d-flex justify-content-between text-muted mb-2">
+                            <span>Subtotal</span>
+                            <span>₹{{ cart.get_total_price|intcomma }}</span>
+                        </div>
+
                         {% if discount %}
-                        <div class="d-flex justify-content-between text-success"><span>Discount ({{ coupon.code }}):</span><span>-₹{{ discount|intcomma }}</span></div>
+                        <div class="d-flex justify-content-between text-success mb-2">
+                            <span>Discount ({{ coupon.code }})</span>
+                            <span>-₹{{ discount|intcomma }}</span>
+                        </div>
                         {% endif %}
-                        <div class="d-flex justify-content-between"><span>Shipping:</span><span>{% if shipping %}₹{{ shipping }}{% else %}Free{% endif %}</span></div>
+
+                        <div class="d-flex justify-content-between text-muted mb-3">
+                            <span>Shipping</span>
+                            <span>{% if shipping %}₹{{ shipping }}{% else %}<strong class="text-success">FREE</strong>{% endif %}</span>
+                        </div>
+
                         <hr>
-                        <div class="d-flex justify-content-between fw-bold h5"><span>Total:</span><span>₹{{ grand_total|intcomma }}</span></div>
-                        <button type="submit" class="btn btn-success w-100 mt-3"><i class="bi bi-lock"></i> Place Order</button>
+
+                        <div class="d-flex justify-content-between fw-bold h5 text-dark my-3">
+                            <span>Grand Total</span>
+                            <span class="text-primary fs-4">₹{{ grand_total|intcomma }}</span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 rounded-3 fw-bold py-3 shadow-sm">
+                            <i class="bi bi-arrow-right-circle-fill me-2"></i> Proceed to Payment
+                        </button>
                     </div>
                 </div>
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h6>Have a coupon?</h6>
+
+                <!-- Coupon Box -->
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-ticket-perforated-fill text-warning me-2"></i>Have a Coupon?</h6>
+                        <form action="{% url 'orders:apply_coupon' %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                {{ coupon_form.code }}
+                                <button type="submit" class="btn btn-outline-primary fw-semibold">Apply</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-    <form action="{% url 'orders:apply_coupon' %}" method="post" class="mt-2">
-        {% csrf_token %}
-        <div class="input-group input-group-sm" style="max-width:320px;">
-            {{ coupon_form.code }}
-            <button type="submit" class="btn btn-outline-primary">Apply</button>
         </div>
     </form>
 </div>

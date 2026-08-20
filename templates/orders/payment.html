@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Complete Payment — ShopSphere{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 800px;">
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="card-header bg-gradient bg-primary text-white p-4 text-center">
+            <h3 class="fw-bold mb-1"><i class="bi bi-credit-card-2-back-fill me-2"></i> ShopSphere Payment Gateway</h3>
+            <p class="mb-0 text-white-50">Complete your payment securely for Order #{{ order.order_number }}</p>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+            <!-- Order Info Banner -->
+            <div class="row align-items-center bg-light p-3 rounded-3 mb-4 border">
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <small class="text-muted text-uppercase fw-bold d-block">TOTAL PAYABLE</small>
+                    <span class="fs-2 fw-extrabold text-primary">₹{{ payment.amount|intcomma }}</span>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <span class="badge bg-secondary mb-1">Method: {{ payment.get_method_display|upper }}</span><br>
+                    <small class="text-muted">Billed to: <strong>{{ order.full_name }}</strong> ({{ order.email }})</small>
+                </div>
+            </div>
+
+            <!-- Gateway Specific Section -->
+            {% if gateway_data.method == 'razorpay' and not gateway_data.is_sandbox %}
+                <!-- Live Razorpay Integration -->
+                <div class="text-center py-4">
+                    <h5 class="fw-bold mb-3">Pay securely with Razorpay</h5>
+                    <p class="text-muted mb-4">Click below to open the official Razorpay payment portal (UPI, Cards, NetBanking, Wallets).</p>
+                    <button id="rzp-button" class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm fw-bold">
+                        <i class="bi bi-wallet2 me-2"></i> Pay ₹{{ payment.amount|intcomma }} with Razorpay
+                    </button>
+
+                    <form id="razorpay-form" action="{% url 'orders:payment_verify' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="order_number" value="{{ order.order_number }}">
+                        <input type="hidden" name="razorpay_payment_id" id="rzp_payment_id">
+                        <input type="hidden" name="razorpay_order_id" id="rzp_order_id">
+                        <input type="hidden" name="razorpay_signature" id="rzp_signature">
+                    </form>
+                </div>
+
+                <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                <script>
+                    var options = {
+                        "key": "{{ gateway_data.razorpay_key_id }}",
+                        "amount": "{{ gateway_data.amount_paise }}",
+                        "currency": "{{ gateway_data.currency }}",
+                        "name": "ShopSphere Store",
+                        "description": "Order #{{ order.order_number }}",
+                        "order_id": "{{ gateway_data.razorpay_order_id }}",
+                        "handler": function (response){
+                            document.getElementById('rzp_payment_id').value = response.razorpay_payment_id;
+                            document.getElementById('rzp_order_id').value = response.razorpay_order_id;
+                            document.getElementById('rzp_signature').value = response.razorpay_signature;
+                            document.getElementById('razorpay-form').submit();
+                        },
+                        "prefill": {
+                            "name": "{{ order.full_name }}",
+                            "email": "{{ order.email }}",
+                            "contact": "{{ order.phone }}"
+                        },
+                        "theme": { "color": "#0d6efd" }
+                    };
+                    var rzp1 = new Razorpay(options);
+                    document.getElementById('rzp-button').onclick = function(e){
+                        rzp1.open();
+                        e.preventDefault();
+                    }
+                </script>
+
+            {% elif gateway_data.method == 'stripe' and not gateway_data.is_sandbox %}
+                <!-- Live Stripe Integration -->
+                <div class="py-3">
+                    <h5 class="fw-bold mb-3">Stripe Card Checkout</h5>
+                    <form id="stripe-payment-form" action="{% url 'orders:payment_verify' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="order_number" value="{{ order.order_number }}">
+                        <input type="hidden" name="stripe_payment_intent_id" id="stripe_intent_id" value="{{ payment.stripe_payment_intent_id }}">
+                        
+                        <div id="card-element" class="p-3 border rounded mb-3 bg-white"></div>
+                        <div id="card-errors" class="text-danger small mb-3" role="alert"></div>
+
+                        <button id="stripe-submit" class="btn btn-indigo btn-lg w-100 rounded-3 text-white fw-bold shadow-sm" style="background-color: #635bff;">
+                            <i class="bi bi-lock-fill me-2"></i> Pay ₹{{ payment.amount|intcomma }} with Stripe
+                        </button>
+                    </form>
+                </div>
+                <script src="https://js.stripe.com/v3/"></script>
+                <script>
+                    var stripe = Stripe('{{ gateway_data.stripe_public_key }}');
+                    var elements = stripe.elements();
+                    var card = elements.create('card');
+                    card.mount('#card-element');
+
+                    var form = document.getElementById('stripe-payment-form');
+                    form.addEventListener('submit', function(event) {
+                        event.preventDefault();
+                        stripe.confirmCardPayment('{{ gateway_data.client_secret }}', {
+                            payment_method: { card: card }
+                        }).then(function(result) {
+                            if (result.error) {
+                                document.getElementById('card-errors').textContent = result.error.message;
+                            } else {
+                                if (result.paymentIntent.status === 'succeeded') {
+                                    form.submit();
+                                }
+                            }
+                        });
+                    });
+                </script>
+
+            {% else %}
+                <!-- Interactive Payment Gateway & Sandbox Mode -->
+                <div class="payment-sandbox-container">
+                    <div class="alert alert-info border-info d-flex align-items-center mb-4 rounded-3" role="alert">
+                        <i class="bi bi-info-circle-fill fs-4 me-3 text-info"></i>
+                        <div>
+                            <strong>Interactive Payment Gateway Simulator</strong><br>
+                            <small>Selected mode: <strong>{{ payment.get_method_display }}</strong>. Complete test transaction below or simulate gateway responses.</small>
+                        </div>
+                    </div>
+
+                    {% if payment.method == 'upi' or payment.method == 'razorpay' %}
+                    <!-- UPI & QR Code Simulator -->
+                    <div class="text-center my-4">
+                        <div class="p-3 bg-white d-inline-block border rounded-4 shadow-sm mb-3 position-relative">
+                            <!-- Simulated QR Code SVG -->
+                            <svg width="180" height="180" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="100" height="100" fill="white"/>
+                                <path d="M10 10H40V40H10V10ZM16 16V34H34V16H16ZM22 22H28V28H22V22Z" fill="#111827"/>
+                                <path d="M60 10H90V40H60V10ZM66 16V34H84V16H66ZM72 22H78V28H72V22Z" fill="#111827"/>
+                                <path d="M10 60H40V90H10V60ZM16 66V84H34V66H16ZM22 72H28V78H22V72Z" fill="#111827"/>
+                                <rect x="50" y="50" width="10" height="10" fill="#0D6EFD"/>
+                                <rect x="70" y="50" width="20" height="10" fill="#111827"/>
+                                <rect x="50" y="70" width="20" height="20" fill="#111827"/>
+                                <rect x="80" y="80" width="10" height="10" fill="#0D6EFD"/>
+                            </svg>
+                        </div>
+                        <p class="small text-muted mb-2">Scan with GPay, PhonePe, Paytm or enter UPI ID below:</p>
+                        
+                        <div class="input-group mb-4 mx-auto" style="max-width: 380px;">
+                            <span class="input-group-text bg-light"><i class="bi bi-at text-primary"></i></span>
+                            <input type="text" class="form-control" value="shopsphere@upi" readonly>
+                            <button class="btn btn-outline-secondary" type="button" onclick="navigator.clipboard.writeText('shopsphere@upi'); alert('UPI ID copied!');">Copy</button>
+                        </div>
+                    </div>
+                    {% elif payment.method == 'card' or payment.method == 'stripe' %}
+                    <!-- Card Simulator -->
+                    <div class="card bg-gradient text-white p-4 rounded-4 shadow mb-4" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <span class="fw-bold tracking-wider fs-5">ShopSphere Pay</span>
+                            <i class="bi bi-credit-card-2-front fs-2"></i>
+                        </div>
+                        <div class="mb-4">
+                            <label class="small text-white-50 d-block">CARD NUMBER</label>
+                            <span class="fs-4 font-monospace tracking-widest">4000 1234 5678 9010</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <small class="text-white-50 d-block">CARD HOLDER</small>
+                                <span class="fw-semibold">{{ order.full_name|upper }}</span>
+                            </div>
+                            <div>
+                                <small class="text-white-50 d-block">EXPIRES</small>
+                                <span class="fw-semibold">12/28</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Test Actions Form -->
+                    <form action="{% url 'orders:payment_verify' %}" method="post" id="sandbox-payment-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="order_number" value="{{ order.order_number }}">
+                        <input type="hidden" name="transaction_id" value="TXN_{{ payment.method|upper }}_{{ order.order_number }}">
+                        <input type="hidden" name="simulate_status" id="simulate_status" value="success">
+
+                        <div class="d-grid gap-3 col-md-10 mx-auto">
+                            <button type="submit" onclick="document.getElementById('simulate_status').value='success';" class="btn btn-success btn-lg rounded-3 fw-bold py-3 shadow-sm">
+                                <i class="bi bi-check-circle-fill me-2"></i> Approve Payment & Complete Order (₹{{ payment.amount|intcomma }})
+                            </button>
+                            <button type="submit" onclick="document.getElementById('simulate_status').value='failed';" class="btn btn-outline-danger rounded-3 fw-semibold">
+                                <i class="bi bi-x-circle-fill me-2"></i> Simulate Payment Failure
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="card-footer bg-light p-3 text-center border-top">
+            <small class="text-muted">
+                <i class="bi bi-shield-lock-fill text-success me-1"></i> Your confirmation email will be delivered to <strong>{{ order.email }}</strong> upon payment completion.
+            </small>
+        </div>
+    </div>
+</div>
+{% endblock %}
